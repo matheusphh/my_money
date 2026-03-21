@@ -259,14 +259,17 @@ fun FinanceApp(viewModel: FinanceViewModel) {
         SCREEN_DASHBOARD -> {
             Scaffold(
                 topBar = {
-                    LargeTopAppBar(
+                    // --- ALTERADO: Substituído LargeTopAppBar por TopAppBar ---
+                    // Isso coloca o título ("Minhas Finanças") e o botão (+) na mesma linha no topo.
+                    TopAppBar(
                         title = { Text("Minhas Finanças", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary) },
                         actions = {
                             IconButton(onClick = { showNewAccountDialog = true }) {
                                 Icon(Icons.Default.Add, contentDescription = "Nova Conta", tint = MaterialTheme.colorScheme.primary)
                             }
                         },
-                        colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.background)
+                        // Atualizado também o tipo de cores
+                        colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
                     )
                 },
                 containerColor = MaterialTheme.colorScheme.background
@@ -395,7 +398,7 @@ fun DashboardScreen(
                     OutlinedTextField(
                         value = description,
                         onValueChange = { description = it },
-                        label = { Text("Descrição (Opcional)") }, // UI indicando opcional
+                        label = { Text("Descrição") }, // UI indicando opcional
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(12.dp)
                     )
