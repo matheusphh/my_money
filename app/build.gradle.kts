@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.mts.mymoney"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.mts.mymoney"
