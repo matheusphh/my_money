@@ -1,8 +1,10 @@
-package com.mts.mymoney // Lembre-se de usar o seu pacote real
+package com.mts.mymoney.service
 
 import android.app.Notification
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import com.mts.mymoney.data.FinanceDatabase
+import com.mts.mymoney.data.TransactionEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
@@ -10,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class FinanceNotificationService : NotificationListenerService() {
 
-    // "Caderninho" na memória para evitar notificações duplicadas
+    // Para evitar notificações duplicadas
     companion object {
         private val processedCache = mutableSetOf<String>()
     }
@@ -26,15 +28,15 @@ class FinanceNotificationService : NotificationListenerService() {
 
             val fullText = "$title $text".lowercase()
 
-            // 1. Cria uma assinatura única baseada no app e no texto da notificação
+            // Cria uma assinatura única baseada no app e no texto da notificação
             val signature = "${packageName}_${fullText}"
 
-            // 2. Se já processamos essa exata notificação recente, IGNORA e sai!
+            // Se já processamos essa exata notificação recente, IGNORA e sai!
             if (processedCache.contains(signature)) {
                 return
             }
 
-            // 3. Lógica para identificar se é uma transação financeira
+            // Lógica para identificar se é uma transação financeira
             if (fullText.contains("r$") || fullText.contains("pix") || fullText.contains("transferência") || fullText.contains("compra")) {
 
                 val amountRegex = Regex("""r\$\s*([\d.,]+)""")
@@ -47,7 +49,7 @@ class FinanceNotificationService : NotificationListenerService() {
                     if (amount != null) {
                         val isIncome = fullText.contains("recebeu") || fullText.contains("recebida") || fullText.contains("chegou") || fullText.contains("te enviou") || fullText.contains("creditado")
 
-                        // 4. Se chegou até aqui, é uma notificação válida. Anotamos no caderninho!
+                        // Se chegou até aqui, é uma notificação válida!
                         processedCache.add(signature)
 
                         // Evita que o caderninho fique gigante e trave o celular
@@ -55,9 +57,9 @@ class FinanceNotificationService : NotificationListenerService() {
                             processedCache.clear()
                         }
 
-                        // 5. Salva no banco de dados
+                        // Salva no banco de dados
                         CoroutineScope(Dispatchers.IO).launch {
-                            val database = FinanceDatabase.getDatabase(applicationContext)
+                            val database = FinanceDatabase.Companion.getDatabase(applicationContext)
                             val dao = database.financeDao()
 
                             val accounts = dao.getAllAccountsFlow().firstOrNull() ?: emptyList()
