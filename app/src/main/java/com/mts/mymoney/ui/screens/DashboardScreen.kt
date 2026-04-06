@@ -226,7 +226,7 @@ fun DashboardScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Botão para ativar leitura de notificações
+        /* Botão para ativar leitura de notificações
         TextButton(
             onClick = { context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)) },
             modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -238,7 +238,7 @@ fun DashboardScreen(
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text("Leitura Automática", fontSize = 12.sp)
-        }
+        } */
     }
 
     if (accountToDelete != null) {

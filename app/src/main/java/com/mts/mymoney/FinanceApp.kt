@@ -1,11 +1,14 @@
 package com.mts.mymoney
 
+import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -21,9 +24,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import android.provider.Settings
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mts.mymoney.ui.components.NewAccountDialog
 import com.mts.mymoney.ui.screens.DashboardScreen
@@ -58,8 +64,15 @@ fun FinanceApp(viewModel: FinanceViewModel) {
             Scaffold(
                 topBar = {
                     TopAppBar(
-                        title = { Text("Minhas finanças", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary) },
+                        title = { Text("\uD83C\uDFE6 Minhas finanças", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary) },
                         actions = {
+                            val context = LocalContext.current
+                            IconButton(onClick = { context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)) }) {
+                                Icon(
+                                    imageVector = Icons.Default.NotificationsActive,
+                                    contentDescription = null
+                                )
+                            }
                             IconButton(onClick = { showNewAccountDialog = true }) {
                                 Icon(Icons.Default.Add, contentDescription = "Nova Conta", tint = MaterialTheme.colorScheme.primary)
                             }
