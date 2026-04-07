@@ -108,8 +108,9 @@ fun FinanceApp(viewModel: FinanceViewModel) {
     if (showNewAccountDialog) {
         NewAccountDialog(
             onDismiss = { showNewAccountDialog = false },
-            onConfirm = { name, pkg ->
-                viewModel.addAccount(name, pkg)
+            onConfirm = { name, pkg, balanceStr ->
+                val parsedBalance = balanceStr.replace(",", ".").toDoubleOrNull() ?: 0.0
+                viewModel.addAccount(name, pkg, parsedBalance)
                 showNewAccountDialog = false
             }
         )

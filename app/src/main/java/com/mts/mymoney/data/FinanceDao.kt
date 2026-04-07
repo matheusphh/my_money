@@ -16,6 +16,7 @@ data class AccountEntity(
     val id: String = UUID.randomUUID().toString(),
     val name: String,
     val linkedPackageName: String? = null // Adicionado para vinculação automática
+
 )
 
 @Entity(tableName = "transactions")

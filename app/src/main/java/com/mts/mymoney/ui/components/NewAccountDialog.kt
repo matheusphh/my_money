@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
@@ -22,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 
 
@@ -41,10 +43,11 @@ val popularBanks = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewAccountDialog(onDismiss: () -> Unit, onConfirm: (String, String?) -> Unit) {
+fun NewAccountDialog(onDismiss: () -> Unit, onConfirm: (String, String?, String) -> Unit) {
     var name by remember { mutableStateOf("") }
     var selectedBank by remember { mutableStateOf(popularBanks[0]) }
     var expanded by remember { mutableStateOf(false) }
+    var initialBalance by remember { mutableStateOf("") } // NOVO: Estado do saldo
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -89,7 +92,19 @@ fun NewAccountDialog(onDismiss: () -> Unit, onConfirm: (String, String?) -> Unit
                     value = name,
                     onValueChange = { name = it },
                     label = { Text("Nome da Conta no App") },
-                    placeholder = { Text("Ex: Nubank PF") },
+                    placeholder = { Text("Ex: Nubank, Banco Inter, etc.") },
+                    singleLine = true,
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                OutlinedTextField(
+                    value = initialBalance,
+                    onValueChange = { initialBalance = it },
+                    label = { Text("Saldo Inicial") },
+                    placeholder = { Text("Ex: 150,00") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.fillMaxWidth()
@@ -100,7 +115,7 @@ fun NewAccountDialog(onDismiss: () -> Unit, onConfirm: (String, String?) -> Unit
             Button(onClick = {
                 if (name.isNotBlank()) {
                     val pkg = selectedBank.packageName.ifBlank { null }
-                    onConfirm(name, pkg)
+                    onConfirm(name, pkg, initialBalance)
                 }
             }) { Text("Gravar") }
         },

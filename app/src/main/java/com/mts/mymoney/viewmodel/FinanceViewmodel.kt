@@ -29,9 +29,32 @@ class FinanceViewModel(private val dao: FinanceDao) : ViewModel() {
         }
     }
 
-    fun addAccount(name: String, linkedPackage: String? = null) {
+    fun addAccount(name: String, linkedPackage: String? = null, initialBalance: Double = 0.0) {
         viewModelScope.launch {
-            dao.insertAccount(AccountEntity(name = name, linkedPackageName = linkedPackage))
+            // 1. Cria a entidade da conta primeiro para gerar o ID
+            val newAccount = AccountEntity(name = name, linkedPackageName = linkedPackage)
+
+            dao.insertAccount(newAccount)
+
+            if (initialBalance > 0.0) {
+                dao.insertTransaction(
+                    TransactionEntity(
+                        accountId = newAccount.id,
+                        description = "Saldo Inicial",
+                        amount = initialBalance,
+                        isIncome = true
+                    )
+                )
+            } else if (initialBalance < 0.0) {
+                dao.insertTransaction(
+                    TransactionEntity(
+                        accountId = newAccount.id,
+                        description = "Saldo Inicial Negativo",
+                        amount = kotlin.math.abs(initialBalance),
+                        isIncome = false
+                    )
+                )
+            }
         }
     }
 
