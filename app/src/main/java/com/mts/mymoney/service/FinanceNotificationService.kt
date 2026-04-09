@@ -59,7 +59,7 @@ class FinanceNotificationService : NotificationListenerService() {
 
                         // Salva no banco de dados
                         CoroutineScope(Dispatchers.IO).launch {
-                            val database = FinanceDatabase.Companion.getDatabase(applicationContext)
+                            val database = FinanceDatabase.getDatabase(applicationContext)
                             val dao = database.financeDao()
 
                             val accounts = dao.getAllAccountsFlow().firstOrNull() ?: emptyList()

@@ -25,6 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import android.provider.Settings
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -35,6 +37,7 @@ import com.mts.mymoney.ui.components.NewAccountDialog
 import com.mts.mymoney.ui.screens.DashboardScreen
 import com.mts.mymoney.ui.screens.TransactionHistoryScreen
 import com.mts.mymoney.viewmodel.FinanceViewModel
+import com.mts.mymoney.ui.theme.Typography
 
 const val SCREEN_DASHBOARD = "dashboard"
 const val SCREEN_HISTORY = "history"
@@ -64,17 +67,34 @@ fun FinanceApp(viewModel: FinanceViewModel) {
             Scaffold(
                 topBar = {
                     TopAppBar(
-                        title = { Text("\uD83D\uDCB5 Minhas finanças", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary) },
+                        title = { Text("\uD83D\uDCB5 Minhas finanças", fontWeight = FontWeight.Bold, fontFamily = Typography.titleLarge.fontFamily, color = MaterialTheme.colorScheme.primary) },
                         actions = {
                             val context = LocalContext.current
                             IconButton(onClick = { context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)) }) {
-                                Icon(
-                                    imageVector = Icons.Default.NotificationsActive,
-                                    contentDescription = null
-                                )
+                                Box(modifier = Modifier
+                                    .size(30.dp)
+                                    .background(color = MaterialTheme.colorScheme.primaryContainer, shape = (RoundedCornerShape(100))  )
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.NotificationsActive,
+                                        contentDescription = null,
+                                        modifier = Modifier.align(Alignment.Center)
+                                    )
+                                }
+
                             }
                             IconButton(onClick = { showNewAccountDialog = true }) {
-                                Icon(Icons.Default.Add, contentDescription = "Nova Conta", tint = MaterialTheme.colorScheme.primary)
+                                Box(modifier = Modifier
+                                    .size(30.dp)
+                                    .background(color = MaterialTheme.colorScheme.primaryContainer, shape = (RoundedCornerShape(100))  )
+                                ) {
+                                    Icon(
+                                        Icons.Default.Add,
+                                        contentDescription = "Nova Conta",
+                                        tint = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.align(Alignment.Center)
+                                    )
+                                }
                             }
                         },
                         colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)

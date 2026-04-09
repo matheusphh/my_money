@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mts.mymoney.data.FinanceDatabase
 import com.mts.mymoney.ui.theme.MyMoneyTheme
@@ -20,6 +21,7 @@ class MainActivity : ComponentActivity() {
         val database = FinanceDatabase.getDatabase(this)
         val dao = database.financeDao()
         val viewModelFactory = FinanceViewModelFactory(dao)
+
 
         setContent {
             MyMoneyTheme {
