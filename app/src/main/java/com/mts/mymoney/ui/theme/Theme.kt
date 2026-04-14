@@ -36,7 +36,6 @@ private val LightColorScheme = lightColorScheme(
     onError = Color(0xFFFFFFFF)
 
 
-
 )
 
 val FinanceDarkColorScheme = darkColorScheme(
