@@ -28,10 +28,10 @@ class FinanceNotificationService : NotificationListenerService() {
 
             val fullText = "$title $text".lowercase()
 
-            // Cria uma assinatura única baseada no app e no texto da notificação
+            // Cria uma assinatura baseada no app e no texto da notificação
             val signature = "${packageName}_${fullText}"
 
-            // Se já processamos essa exata notificação recente, IGNORA e sai!
+            // Se já processamos essa notificação, IGNORA e sai!
             if (processedCache.contains(signature)) {
                 return
             }
@@ -52,7 +52,7 @@ class FinanceNotificationService : NotificationListenerService() {
                         // Se chegou até aqui, é uma notificação válida!
                         processedCache.add(signature)
 
-                        // Evita que o caderninho fique gigante e trave o celular
+                        // Evita que o trave o celular
                         if (processedCache.size > 50) {
                             processedCache.clear()
                         }

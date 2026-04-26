@@ -1,11 +1,15 @@
 package com.mts.mymoney
 
 import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.NotificationsActive
@@ -24,19 +28,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import android.provider.Settings
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Money
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -44,8 +39,8 @@ import com.mts.mymoney.ui.components.NewAccountDialog
 import com.mts.mymoney.ui.screens.DashboardScreen
 import com.mts.mymoney.ui.screens.TelaDoacaoPix
 import com.mts.mymoney.ui.screens.TransactionHistoryScreen
-import com.mts.mymoney.viewmodel.FinanceViewModel
 import com.mts.mymoney.ui.theme.Typography
+import com.mts.mymoney.viewmodel.FinanceViewModel
 
 const val SCREEN_DASHBOARD = "dashboard"
 const val SCREEN_HISTORY = "history"
@@ -84,6 +79,22 @@ fun FinanceApp(viewModel: FinanceViewModel) {
                         title = { Text("Minhas finanças", fontWeight = FontWeight.Bold, fontFamily = Typography.titleLarge.fontFamily, color = MaterialTheme.colorScheme.primary) },
                         actions = {
                             val context = LocalContext.current
+
+                            IconButton(
+                                onClick = { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/matheusphh/my_money.git"))) }) {
+                                Box(modifier = Modifier
+                                    .size(30.dp)
+                                    .background(color = MaterialTheme.colorScheme.primaryContainer, shape = (RoundedCornerShape(100))  )
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.github),
+                                        contentDescription = null,
+                                        modifier = Modifier.align(Alignment.Center).size(22.dp)
+                                    )
+                                }
+
+                            }
+
                             IconButton(onClick = { context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)) }) {
                                 Box(modifier = Modifier
                                     .size(30.dp)
@@ -97,6 +108,7 @@ fun FinanceApp(viewModel: FinanceViewModel) {
                                 }
 
                             }
+
                             IconButton(onClick = { showNewAccountDialog = true }) {
                                 Box(modifier = Modifier
                                     .size(30.dp)
