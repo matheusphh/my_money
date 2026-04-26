@@ -26,7 +26,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import android.provider.Settings
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Money
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -35,12 +42,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mts.mymoney.ui.components.NewAccountDialog
 import com.mts.mymoney.ui.screens.DashboardScreen
+import com.mts.mymoney.ui.screens.TelaDoacaoPix
 import com.mts.mymoney.ui.screens.TransactionHistoryScreen
 import com.mts.mymoney.viewmodel.FinanceViewModel
 import com.mts.mymoney.ui.theme.Typography
 
 const val SCREEN_DASHBOARD = "dashboard"
 const val SCREEN_HISTORY = "history"
+
+const val SCREEN_PIX = "pix"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,6 +69,10 @@ fun FinanceApp(viewModel: FinanceViewModel) {
     }
 
     BackHandler(enabled = currentScreen == SCREEN_HISTORY) {
+        currentScreen = SCREEN_DASHBOARD
+    }
+
+    BackHandler(enabled = currentScreen == SCREEN_PIX) {
         currentScreen = SCREEN_DASHBOARD
     }
 
@@ -111,7 +125,8 @@ fun FinanceApp(viewModel: FinanceViewModel) {
                             viewModel.addTransaction(accountId, desc, amount, isIncome)
                         },
                         onDeleteAccount = { viewModel.deleteAccount(it) },
-                        onNavigateToHistory = { currentScreen = SCREEN_HISTORY }
+                        onNavigateToHistory = { currentScreen = SCREEN_HISTORY},
+                        onNavigateToPix = { currentScreen = SCREEN_PIX }
                     )
                 }
             }
@@ -124,7 +139,11 @@ fun FinanceApp(viewModel: FinanceViewModel) {
             )
         }
 
-
+        SCREEN_PIX -> {
+            TelaDoacaoPix(
+                modifier = Modifier.padding(16.dp),
+                onBack = { currentScreen = SCREEN_DASHBOARD })
+        }
     }
 
     if (showNewAccountDialog) {
@@ -138,4 +157,3 @@ fun FinanceApp(viewModel: FinanceViewModel) {
         )
     }
 }
-

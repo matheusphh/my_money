@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -20,101 +21,118 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.Scaffold
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TelaDoacaoPix(chavePix: String = "00020101021126580014br.gov.bcb.pix01369771d54a-224e-4123-8b8f-62bc6028db795204000053039865802BR5914MATEUS C ROCHA6010SAO FELIPE62070503***63048B3D") {
+fun TelaDoacaoPix(
+    modifier: Modifier = Modifier,
+    onBack: () -> Unit,
+    chavePix: String = "00020101021126580014br.gov.bcb.pix01369771d54a-224e-4123-8b8f-62bc6028db795204000053039865802BR5914MATEUS C ROCHA6010SAO FELIPE62070503***63048B3D"
+) {
     // Pegamos as referências do Clipboard (Área de transferência) e do Contexto (para o Toast)
     val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        // 1. Título e Instruções
-        Text(
-            text = "Apoie nosso projeto",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Escaneie o QR Code abaixo com o aplicativo do seu banco:",
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // 2. O QR Code
-        // Nota: Você pode usar uma imagem estática nos seus 'drawables' ou
-        // uma biblioteca como o ZXing para gerar o bitmap a partir da chave copia e cola.
-        Image(
-            painter = painterResource(id = R.drawable.img), // Substitua pela imagem do seu QR Code
-            contentDescription = "QR Code para doação via Pix",
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Apoie meu projeto", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary) },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar", tint = MaterialTheme.colorScheme.primary)
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
+            )
+        },
+        containerColor = MaterialTheme.colorScheme.background
+    ){ paddingValues ->
+        Column(
             modifier = Modifier
-                .size(220.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .padding(16.dp)
-        )
-
-        Spacer(modifier = Modifier.height(40.dp))
-
-        Text(
-            text = "Ou copie a chave Pix:",
-            style = MaterialTheme.typography.bodyMedium
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // 3. Exibição da Chave Pix
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            ),
-            shape = RoundedCornerShape(8.dp)
-        ) {
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ){
             Text(
-                text = chavePix,
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Medium
+                text = "Escaneie o QR Code abaixo com o aplicativo do seu banco:",
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-        }
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
-        // 4. Botão de Copiar
-        Button(
-            onClick = {
-                // Copia o texto para a área de transferência
-                clipboardManager.setText(AnnotatedString(chavePix))
-
-                // Mostra um aviso (Toast) na tela de que foi copiado
-                Toast.makeText(context, "Chave Pix copiada!", Toast.LENGTH_SHORT).show()
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.ContentCopy,
-                contentDescription = null,
-                modifier = Modifier.size(20.dp)
+            // 2. O QR Code
+            // Nota: Você pode usar uma imagem estática nos seus 'drawables' ou
+            // uma biblioteca como o ZXing para gerar o bitmap a partir da chave copia e cola.
+            Image(
+                painter = painterResource(id = R.drawable.img), // Substitua pela imagem do seu QR Code
+                contentDescription = "QR Code para doação via Pix",
+                modifier = Modifier
+                    .size(220.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .padding(16.dp)
             )
-            Spacer(modifier = Modifier.width(8.dp))
+
+            Spacer(modifier = Modifier.height(40.dp))
+
             Text(
-                text = "Copiar Chave Pix",
-                style = MaterialTheme.typography.titleMedium
+                text = "Ou copie a chave Pix:",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // 3. Exibição da Chave Pix
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                ),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text(
+                    text = chavePix,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // 4. Botão de Copiar
+            Button(
+                onClick = {
+                    // Copia o texto para a área de transferência
+                    clipboardManager.setText(AnnotatedString(chavePix))
+
+                    // Mostra um aviso (Toast) na tela de que foi copiado
+                    Toast.makeText(context, "Chave Pix copiada!", Toast.LENGTH_SHORT).show()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(12.dp),
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ContentCopy,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Copiar Chave Pix",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.background
+                )
+            }
         }
     }
 }

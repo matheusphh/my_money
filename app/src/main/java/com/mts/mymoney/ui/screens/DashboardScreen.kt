@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Coffee
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -61,7 +62,8 @@ fun DashboardScreen(
     transactions: List<TransactionEntity>,
     onAddTransaction: (String, String, Double, Boolean) -> Unit,
     onDeleteAccount: (AccountEntity) -> Unit,
-    onNavigateToHistory: () -> Unit
+    onNavigateToHistory: () -> Unit,
+    onNavigateToPix: () -> Unit
 ) {
     var description by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }
@@ -210,26 +212,26 @@ fun DashboardScreen(
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             )
         ) {
-            Icon(Icons.Default.History, contentDescription = null)
+            Icon(Icons.Default.History, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
             Spacer(modifier = Modifier.width(8.dp))
             Text("Ver Histórico Completo", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        /* Botão para ativar leitura de notificações
-        TextButton(
-            onClick = { context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)) },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Icon(
-                Icons.Default.NotificationsActive,
-                contentDescription = null,
-                modifier = Modifier.size(16.dp)
+        ElevatedButton(
+            onClick = onNavigateToPix,
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            colors = ButtonDefaults.elevatedButtonColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text("Leitura Automática", fontSize = 12.sp)
-        } */
+        ) {
+            Icon(Icons.Default.Coffee, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Ajude o desenvolvedor", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+        }
     }
 
     if (accountToDelete != null) {
